@@ -19,6 +19,14 @@ const candidateSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    mobile: {
+      type: String,
+      required: true,
+      unique: true, // ensures one candidate per number
+      match: [/^[0-9]{10}$/, "Please enter a valid 10-digit mobile number"], // validation
+      trim: true,
+    },
+
     tech: {
       type: String,
       required: true,

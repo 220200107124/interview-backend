@@ -6,6 +6,7 @@ const sendMail = require("./email");
 const getAllCandidates = async (req, res) => {
 
 
+  
    try {
     const candidates = await Candidate.aggregate([
       {
@@ -39,14 +40,6 @@ const getAllCandidates = async (req, res) => {
     console.error("Error fetching candidates with token:", err);
     res.status(500).json({ error: "Server error" });
   }
-
-  
-  // try {
-  //   const candidates = await Candidate.find();
-  //   res.json(candidates);
-  // } catch (err) {
-  //   res.status(500).json({ error: "Server error" });
-  // }
 };
 
 // GET single candidate
@@ -64,6 +57,7 @@ const getCandidateById = async (req, res) => {
 // POST add new candidate
 const addCandidate = async (req, res) => {
   try {
+    console.log("request body from candidate controller",req.body)
     const newCandidate = new Candidate(req.body);
     const saved = await newCandidate.save();
     res.status(201).json(saved);
