@@ -1,17 +1,15 @@
 const Candidate = require("../entity/candidate");
 const Assignment = require("../entity/Assignment");
 const sendMail = require("./email");
+const quizzes = require("../../quiz/entity/quizzes");
 
 // GET all candidates
 const getAllCandidates = async (req, res) => {
-
-
-  
-   try {
+  try {
     const candidates = await Candidate.aggregate([
       {
         $lookup: {
-          from: "assignments", // collection name in MongoDB (plural, lowercase)
+          from: "assignments",
           localField: "_id",
           foreignField: "candidateId",
           as: "assignments",
@@ -54,12 +52,25 @@ const getCandidateById = async (req, res) => {
   }
 };
 
-// POST add new candidate
 const addCandidate = async (req, res) => {
   try {
-    console.log("request body from candidate controller",req.body)
+    console.log("request body from candidate controller", req.body);
+
+    const { difficulty } = req.body;
+
+    // ✅ Check if any quiz exists with this difficulty
+    const quizExists = await quizzes.findOne({ difficulty });
+
+    if (!quizExists) {
+      return res
+        .status(400)
+        .json({ error: `No quiz found with difficulty '${difficulty}'` });
+    }
+
+    // ✅ Proceed only if quiz difficulty exists
     const newCandidate = new Candidate(req.body);
     const saved = await newCandidate.save();
+
     res.status(201).json(saved);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -69,17 +80,33 @@ const addCandidate = async (req, res) => {
 // PUT update candidate
 const updateCandidate = async (req, res) => {
   try {
+    const { difficulty } = req.body;
+
+    // ✅ If difficulty is being updated, check if it exists in Quiz
+    if (difficulty) {
+      const quizExists = await quizzes.findOne({ difficulty });
+      if (!quizExists) {
+        return res
+          .status(400)
+          .json({ error: `No quiz found with difficulty '${difficulty}'` });
+      }
+    }
+
     const updated = await Candidate.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
+
+    if (!updated) {
+      return res.status(404).json({ error: "Candidate not found" });
+    }
+
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-// DELETE candidate
 const deleteCandidate = async (req, res) => {
   try {
     await Candidate.findByIdAndDelete(req.params.id);
@@ -125,10 +152,11 @@ const sendQuizEmail = async (req, res) => {
       .json({ message: "Failed to send email", error: error.message });
   }
 };
- module.exports={getAllCandidates,getCandidateById,
-                 addCandidate,updateCandidate,
-                 deleteCandidate,sendQuizEmail,
-
-
-
- };
+module.exports = {
+  getAllCandidates,
+  getCandidateById,
+  addCandidate,
+  updateCandidate,
+  deleteCandidate,
+  sendQuizEmail,
+};
