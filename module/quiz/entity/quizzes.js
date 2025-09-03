@@ -18,6 +18,7 @@ const quizSchema = new mongoose.Schema({
     enum: ["Easy", "Beginner", "Intermediate", "Advanced"],
     required: true,
   },
+  duration:{type:Number,required:true,default:30},
   questions: { type: [questionSchema], default: [] },
   createdAt: { type: Date, default: Date.now },
 });

@@ -64,6 +64,7 @@ const getByToken = async (req, res) => {
           "candidateData.difficulty": 1,
           "quizData.title": 1,
           "quizData.questions": 1,
+          "quizData.duration": 1,
         },
       },
     ]);
