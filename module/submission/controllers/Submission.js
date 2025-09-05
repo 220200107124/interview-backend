@@ -10,9 +10,9 @@ const submitQuiz = async (req, res) => {
   try {
     const { assignmentId, answers } = req.body;
 
-    if (!assignmentId || !answers) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
+    // if (!assignmentId || !answers) {
+    //   return res.status(400).json({ error: "Missing required fields" });
+    // }
     if (!Array.isArray(answers)) {
       return res.status(400).json({ error: "Answers must be an array" });
     }
@@ -86,9 +86,12 @@ const submitQuiz = async (req, res) => {
 
     await result.save();
     console.log("result saved",result);
-    // Update assignment status
+   
     assignment.status = "completed";
-    assignment.completedAt = new Date();
+    assignment.token=null;
+    // assignment.token = assignment.token + "_used"; 
+     assignment.completedAt = new Date();
+     
     if (!assignment.startedAt) {
       assignment.startedAt = new Date();
     }

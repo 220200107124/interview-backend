@@ -8,8 +8,11 @@ const reassignQuiz = async (req, res) => {
     const assignment = await Assignment.findOne({ candidateId, quizId });
     if (!assignment)
       return res.status(404).json({ message: "Assignment not found" });
+       if (!assignment.token || assignment.status === "completed") {
+      return res.status(403).json({ error: "This quiz link has already been used" });
+    }
 
-    const newToken = crypto.randomBytes(16).toString("hex");
+  const newToken = crypto.randomBytes(16).toString("hex");
     assignment.token = newToken;
     assignment.status = "pending";
     assignment.assignedAt = new Date();
@@ -68,6 +71,7 @@ const getByToken = async (req, res) => {
         },
       },
     ]);
+
 
     if (!result.length) {
       return res

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 
 const assignmentSchema = new mongoose.Schema({
   candidateId: {
@@ -13,7 +14,7 @@ const assignmentSchema = new mongoose.Schema({
   },
   token: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
     default: function () {
       // Auto-generate token if not provided
@@ -35,16 +36,22 @@ const assignmentSchema = new mongoose.Schema({
   completedAt: {
     type: Date,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  createAt:{
+    type:Date,
+    default:Date.now,
+
+
+  }
 });
 
 // Prevent duplicate assignments for same candidate+quiz
 assignmentSchema.index({ candidateId: 1, quizId: 1 }, { unique: true });
 
 // Ensure token is unique
-assignmentSchema.index({ token: 1 }, { unique: true });
+assignmentSchema.index(
+  { token: 1 },
+  { unique: true, partialFilterExpression: { token: { $type: "string" } } }
+);
+
 
 module.exports = mongoose.model("Assignment", assignmentSchema);

@@ -15,12 +15,38 @@ const getAllCandidates = async (req, res) => {
           as: "assignments",
         },
       },
+     {
+  $addFields: {
+    assignment: {
+      $cond: {
+        if: { $gt: [{ $size: "$assignments" }, 0] },
+        then: { $arrayElemAt: ["$assignments", 0] },  // full object instead of just token
+        else: null,
+      },
+    },
+  },
+},
+
+      {
+        $project: {
+          assignments: 0, // hide full assignments array
+        },
+      },
+
+ {
+        $lookup: {
+          from: "results",
+          localField: "_id",
+          foreignField: "candidateId",
+          as: "results",
+        },
+      },
       {
         $addFields: {
-          token: {
+          result: {
             $cond: {
-              if: { $gt: [{ $size: "$assignments" }, 0] },
-              then: { $arrayElemAt: ["$assignments.token", 0] },
+              if: { $gt: [{ $size: "$results" }, 0] },
+              then: { $arrayElemAt: ["$results", 0] },
               else: null,
             },
           },
@@ -28,9 +54,11 @@ const getAllCandidates = async (req, res) => {
       },
       {
         $project: {
-          assignments: 0, // hide full assignments array
+          results: 0, // hide full array
         },
       },
+
+      
     ]);
 
     res.status(200).json(candidates);
@@ -58,7 +86,7 @@ const addCandidate = async (req, res) => {
 
     const { difficulty } = req.body;
 
-    // ✅ Check if any quiz exists with this difficulty
+    //  Check if any quiz exists with this difficulty
     const quizExists = await quizzes.findOne({ difficulty });
 
     if (!quizExists) {
@@ -67,7 +95,7 @@ const addCandidate = async (req, res) => {
         .json({ error: `No quiz found with difficulty '${difficulty}'` });
     }
 
-    // ✅ Proceed only if quiz difficulty exists
+    //  Proceed only if quiz difficulty exists
     const newCandidate = new Candidate(req.body);
     const saved = await newCandidate.save();
 
@@ -82,7 +110,7 @@ const updateCandidate = async (req, res) => {
   try {
     const { difficulty } = req.body;
 
-    // ✅ If difficulty is being updated, check if it exists in Quiz
+    // If difficulty is being updated, check if it exists in Quiz
     if (difficulty) {
       const quizExists = await quizzes.findOne({ difficulty });
       if (!quizExists) {
