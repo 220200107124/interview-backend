@@ -4,6 +4,7 @@ const Quiz = require("../../quiz/entity/quizzes");
 const Assignment = require("../../candidate/entity/Assignment");
 const sendMail = require("../../candidate/controllers/email");
 
+
 // POST /assign/:candidateId
 const assignQuiz = async (req, res) => {
   console.log("POST assign method begins");
@@ -112,5 +113,6 @@ const reassignQuiz = async (req, res) => {
 module.exports = {
   assignQuiz,
   reassignQuiz,
+ 
 
 };
