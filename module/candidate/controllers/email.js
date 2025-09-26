@@ -6,10 +6,12 @@ const transporter = nodemailer.createTransport({
     port: 587,
     secure:false,
   auth: {
-    user: "reenatanchak@gmail.com", // your Gmail
-    pass: "iupl oywm vloz ybec",   // your App Password (not Gmail password)
+    user: "reenatanchak@gmail.com", //  Gmail  id
+    pass: "iupl oywm vloz ybec",   // your App Password 
   },
+
 });
+  console.log("node mailer is working");
 
 
 const sendMail = async (to, subject, text, html = null) => {

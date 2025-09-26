@@ -32,7 +32,13 @@ const login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ message: "Login successful", token,userInfo:auth });
+    res.json({
+      role:auth.role,
+      name:authname,
+      email:auth.email,
+
+      message: "Login successful"
+      , token,userInfo:auth });
     console.log("login successfully",auth);
   } catch (error) {
     console.error("auth login error:", error);
