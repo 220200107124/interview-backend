@@ -7,6 +7,7 @@ async function createSuperAdmin() {
   try {
     const email = process.env.SUPER_ADMIN_EMAIL;
     const password = process.env.SUPER_ADMIN_PASS;
+    // const candidateEmail=process.env.candidateEmail;
 
     if (!email || !password) {
       console.log("Super admin credentials not set in .env");
