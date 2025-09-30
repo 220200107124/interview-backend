@@ -24,7 +24,7 @@ const authSchema = new mongoose.Schema({
     default: "admin",
     //  role: { type: String, enum: ["superadmin","admin","candidate"], default: "admin" },
   },
-  createdAt: {
+  createdAt: {  
     type: Date,
     default: Date.now
   }
@@ -36,7 +36,7 @@ authSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
-});
+}); 
 
 
 // Method to compare password

@@ -34,7 +34,7 @@ const login = async (req, res) => {
 
     res.json({
       role:auth.role,
-      name:authname,
+      name:auth.name,
       email:auth.email,
 
       message: "Login successful"
