@@ -26,7 +26,7 @@ const assignQuiz = async (req, res) => {
 
     let assignment = await Assignment.findOne({ candidateId, quizId });
 
-    const quizLinkBase = "https://comfy-selkie-020033.netlify.app/quiz/";
+    const quizLinkBase = "https://questifymanagment.netlify.app/quiz/";
 
     if (assignment) {
       assignment.assignedAt = new Date();

@@ -38,6 +38,16 @@ const candidateSchema = new mongoose.Schema(
       trim: true,
       enum: ["Easy", "Beginner", "Intermediate", "Advanced"], // optional
     },
+    //     password: {
+    //   type: String,
+    //   required: true, // will store hashed password
+    // },
+    // role: {
+    //   type: String,
+    //   enum: ["candidate"], // default only candidates in this schema
+    //   default: "candidate",
+    // },
+
   },
   {
     timestamps: true,

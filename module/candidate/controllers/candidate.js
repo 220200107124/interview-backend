@@ -159,7 +159,7 @@ const sendQuizEmail = async (req, res) => {
         .json({ message: "Assignment not found for candidate" });
 
     // Link with token
-    const quizLink = `https://comfy-selkie-020033.netlify.app/quiz/${assignment.token}`;
+    const quizLink = `https://questifymanagment.netlify.app/quiz/${assignment.token}`;
 
     // Send email
     await sendMail(
