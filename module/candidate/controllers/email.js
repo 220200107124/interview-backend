@@ -1,50 +1,25 @@
-// const nodemailer = require("nodemailer");
-
-// // Create reusable transporter
-// const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//     port: 587,
-//     secure:false,
-//   auth: {
-//     user: "reenatanchak@gmail.com", //  Gmail  id
-//     pass: "iupl oywm vloz ybec",   // your App Password 
-//   },
-
-// });
-//   console.log("node mailer is working");
-
-
-// const sendMail = async (to, subject, text, html = null) => {
-//   try {
-//     const mailOptions = {
-//       from: "reenatanchak@gmail.com",
-//       to,
-//       subject,
-//       text,
-//       ...(html && { html }), // add html only if provided
-//     };
-
-//     const info = await transporter.sendMail(mailOptions);
-//     console.log("Email sent: " + info.response);
-//     return info;
-//   } catch (error) {
-//     console.error(" Error sending email:", error);
-//     throw error;
-//   }
-// };
 
 // module.exports = sendMail;
 const nodemailer = require("nodemailer");
+require('dotenv').config();
 
 // Create reusable transporter
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   port: 587,
+//   secure: false, 
+//   auth: {
+//     user: "reenatanchak@gmail.com", // Gmail account
+//     pass: "iupl oywm vloz ybec",    // App password 
+//   },
+// });
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: "reenatanchak@gmail.com", // Gmail account
-    pass: "iupl oywm vloz ybec",    // App password (DO NOT use real Gmail password)
-  },
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // App password
+    },
 });
 
 // Verify transporter configuration
@@ -64,7 +39,7 @@ const sendMail = async (to, subject, text, html = null) => {
       to,
       subject,
       text,
-      ...(html && { html }), // only include html if provided
+      ...(html && { html }), 
     };
 
     const info = await transporter.sendMail(mailOptions);
