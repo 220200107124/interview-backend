@@ -13,7 +13,7 @@ const assignmentSchema = new mongoose.Schema({
   },
   token: {
     type: String,
-    required: true,
+    // required: true,
     unique: true,
     default: function () {
       // Auto-generate token if not provided

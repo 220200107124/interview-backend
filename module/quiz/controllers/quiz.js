@@ -60,17 +60,49 @@ const  deleteQuiz = async (req, res) => {
 };
 
 // Add question
-const  addQuestion = async (req, res) => {
+// const  addQuestion = async (req, res) => {
+//   try {
+//     const { question, options, correctAnswer } = req.body;
+//     if (!question || !options || correctAnswer === undefined) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
+
+//     const quiz = await Quiz.findById(req.params.id);
+//     if (!quiz) return res.status(404).json({ error: "Quiz not found" });
+
+//     quiz.questions.push({ question, options, correctAnswer });
+//     await quiz.save();
+
+//     res.json({ message: "Question added", quiz });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+const addQuestion = async (req, res) => {
   try {
-    const { question, options, correctAnswer } = req.body;
-    if (!question || !options || correctAnswer === undefined) {
-      return res.status(400).json({ error: "All fields are required" });
+    const { type, question, options, correctAnswer } = req.body;
+
+    if (!type || !question || correctAnswer === undefined) {
+      return res.status(400).json({ error: "Type, question, and correctAnswer are required" });
+    }
+
+    // Validation based on type
+    if (type === "radio" && typeof correctAnswer !== "number") {
+      return res.status(400).json({ error: "Radio question must have a single index as correctAnswer" });
+    }
+
+    if (type === "checkbox" && !Array.isArray(correctAnswer)) {
+      return res.status(400).json({ error: "Checkbox question must have an array of indexes as correctAnswer" });
+    }
+
+    if (type === "text" && typeof correctAnswer !== "string") {
+      return res.status(400).json({ error: "Text question must have a string as correctAnswer" });
     }
 
     const quiz = await Quiz.findById(req.params.id);
     if (!quiz) return res.status(404).json({ error: "Quiz not found" });
 
-    quiz.questions.push({ question, options, correctAnswer });
+    quiz.questions.push({ type, question, options, correctAnswer });
     await quiz.save();
 
     res.json({ message: "Question added", quiz });
