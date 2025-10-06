@@ -71,6 +71,7 @@ const getByToken = async (req, res) => {
           "quizData.duration": 1,
            "quizData.description": 1,
             "quizData.difficulty": 1,
+            "quizData.category":1,
         },
       },
     ]);
