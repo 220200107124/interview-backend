@@ -5,7 +5,7 @@ const crypto = require("crypto");
 // Reassign (PATCH)
 const reassignQuiz = async (req, res) => {
   try {
-    const { candidateId, quizId } = req.params;
+    const {candidateId, quizId } = req.params;
     const assignment = await Assignment.findOne({ candidateId, quizId });
     if (!assignment)
       return res.status(404).json({ message: "Assignment not found" });
